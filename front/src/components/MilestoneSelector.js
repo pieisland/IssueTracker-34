@@ -91,11 +91,20 @@ const MilestoneDiv = styled.div`
   margin: 0px 16px;
 `;
 
-const CheckedMilestoneDiv = styled.div`
+const EmptyMilestoneDiv = styled.div`
   display: flex;
   align-items: center;
   height: 34px;
   font-size: 12px;
+  padding: 1px 6px;
+`;
+
+const CheckedMilestoneDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 34px;
+  font-size: 14px;
+  padding: 1px 6px;
 `;
 
 const CheckedMilestonesDiv = styled.div`
@@ -123,61 +132,68 @@ const Unchecked = styled.div`
 const MilestoneId = styled.span`
   font-size: 12px;
   font-weight: 500;
-  margin-right: 8px;
+  margin-left: 8px;
   color: #000;
 `;
+
+const ProgressBarWrap = styled.div`
+  display: flex;
+  width: 90%;
+  height: 5px;
+  background-color: grey;
+  border-radius: 3px;
+`;
+
+const ProgressBar = styled.div`
+  width: 100%;
+`;
+
+//마일스톤이 얼마나 진행됐는지에 대한 정보가 필요한데..
+const tempData = [
+  {
+    id: 1,
+    title: 'week1',
+    description: '.',
+    due_date: '',
+    status_open_closed: true,
+    checked: false,
+  },
+  {
+    id: 2,
+    title: 'week2',
+    description: '.',
+    due_date: '',
+    status_open_closed: true,
+    checked: false,
+  },
+  {
+    id: 3,
+    title: 'week3',
+    description: '.',
+    due_date: '',
+    status_open_closed: true,
+    checked: false,
+  },
+];
 
 const MilestoneSelector = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const [milestones, setMilestone] = useState([
-    {
-      id: 1,
-      title: 'wee1',
-      description: '.',
-      due_date: '',
-      status_open_closed: true,
-      checked: false,
-    },
-    {
-      id: 2,
-      title: 'wee2',
-      description: '.',
-      due_date: '',
-      status_open_closed: true,
-      checked: false,
-    },
-    {
-      id: 3,
-      title: 'wee3',
-      description: '.',
-      due_date: '',
-      status_open_closed: true,
-      checked: false,
-    },
-    {
-      id: 4,
-      title: 'wee4',
-      description: '.',
-      due_date: '',
-      status_open_closed: true,
-      checked: false,
-    },
-    {
-      id: 5,
-      title: 'wee5',
-      description: '.',
-      due_date: '',
-      status_open_closed: true,
-      checked: false,
-    },
-  ]);
+  const [milestones, setMilestone] = useState(tempData);
 
   let isMilestoneChecked = false;
   const checkedMilestone = milestones.map((milestone, idx) => {
     if (milestone.checked) {
       isMilestoneChecked = true;
-      return <div key={idx}>{milestone.title}</div>;
+      return (
+        <CheckedMilestoneDiv key={idx}>
+          <ProgressBarWrap>
+            <ProgressBar></ProgressBar>
+            <ProgressBar></ProgressBar>
+          </ProgressBarWrap>
+          {milestone.title}
+        </CheckedMilestoneDiv>
+      );
     }
   });
 
@@ -202,10 +218,10 @@ const MilestoneSelector = () => {
     setMilestone(newMilestones);
   };
 
-  const allMilestones = milestones.map((milestone, idx) => {
+  const allMilestones = milestones.map((milestone) => {
     return (
       <div
-        key={idx}
+        key={milestone.id}
         onClick={() => {
           selectMilestone(milestone.id);
           setIsOpen(false);
@@ -227,7 +243,7 @@ const MilestoneSelector = () => {
         <SettingSvg />
       </MilestonesButton>
       {isMilestoneChecked === false ? (
-        <CheckedMilestoneDiv>No milestone</CheckedMilestoneDiv>
+        <EmptyMilestoneDiv>No milestone</EmptyMilestoneDiv>
       ) : (
         <> {checkedMilestone} </>
       )}
